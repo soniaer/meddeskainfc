@@ -45,23 +45,23 @@ Patient ID CARD Data Viewer</div>
      </div><span style={{fontSize:"70%"}}>It Just works Better</span>
           </div>
           <div style={{alignItems:"center", width: "94%",
-          maxHeight:'410px',height:"100%",marginLeft:"3%",marginTop:"2%",
+          maxHeight:'419px',height:"100%",marginLeft:"3%",marginTop:"1.5%",
           justifyContent:"space-between",display:"flex"
          }}>
            <div style={{ width: "94%",
-          maxHeight:'410px',height:"100%",marginLeft:"0%",marginTop:"0%",
+          maxHeight:'419px',height:"100%",marginLeft:"0%",marginTop:"0%",
           justifyContent:"center", alignItems:"flex-start",display:"flex",
           flexDirection:"column",
         
          }}>
       <div style={{border:"2px solid #fff", width: "96.5%",
-          maxHeight:'410px',height:"100%",
+          maxHeight:'419px',height:"100%",
           justifyContent:"center",textAlign:"center",
           alignItems:"center",display:"flex",color:"#000",fontSize:"18px",
           backgroundColor:"#fff",  overflowX:"hidden"
          }}>
   <div style={{ width: "37%",
-          maxHeight:'410px',height:"100%",
+          maxHeight:'419px',height:"100%",
           justifyContent:"center",textAlign:"center",
           alignItems:"center",color:"#000",fontSize:"18px",
           backgroundColor:"#e5e7eb",marginRight:"1%",
@@ -228,7 +228,7 @@ height:"100%",marginTop:"3%"}}  class="table table-responsive" >
          </div>
     
          <div style={{ width: "54%",
-          maxHeight:'410px',height:"100%",marginLeft:"0%",marginTop:"0%",
+          maxHeight:'419px',height:"100%",marginLeft:"0%",marginTop:"0%",
          textAlign:"center",
           alignItems:"center",display:"flex",color:"#fff",fontSize:"18px", flexDirection:"column",
          }}>
