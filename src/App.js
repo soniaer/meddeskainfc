@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
       <Routes>
   
-      <Route path="/nfc" element={<NFC />} />
+      <Route path="/" element={<NFC />} />
      
       </Routes>
       </BrowserRouter>
