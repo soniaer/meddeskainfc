@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 function NFC() {
 //const [IdCard_Number,setIdCard_Number] = useState("")
@@ -17,6 +18,8 @@ const [Primary_Physician,setPrimary_Physician] = useState("")
 const [Date_Of_Visit,setDate_Of_Visit] = useState("")
 const [Additional_Data,setAdditional_Data] = useState("")
 
+  
+const navigate = useNavigate();
 
 const adddata =async() =>{
   fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/addpatient`,
