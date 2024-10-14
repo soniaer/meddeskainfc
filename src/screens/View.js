@@ -202,7 +202,7 @@ backgroundColor:"#d1d5db"}}>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Address}</td>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Phone_Number}</td>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Primary_Physician}</td>
-<td onClick={()=>deleteid(item?.id)} style={{borderRight:"2px solid #d1d5db",borderTop:"none",cursor:"pointer"}}><img slt="" src={require("../img/delete.png")} 
+<td onClick={()=>deleteid(item?.id)} style={{borderRight:"2px solid #d1d5db",borderTop:"none",cursor:"pointer"}}><img alt="" src={require("../img/delete.png")} 
 style={{width:"55%",height:"20px"}} /></td>
 </tr>
     )}
