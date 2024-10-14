@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import NFC from './screens/NFC';
@@ -7,13 +7,13 @@ import Patients from './screens/View';
 function App() {
   return (
     <div >
-      <BrowserRouter>
+      <HashRouter>
       <Routes>
   
       <Route path="/" element={<NFC />} />
          <Route path="/view" element={<Patients />} />
       </Routes>
-      </BrowserRouter>
+      </HashRouter>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
