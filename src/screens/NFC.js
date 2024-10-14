@@ -140,14 +140,14 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",
 backgroundColor:"#f3f4f6",paddingLeft:"3%"}}>
-PATIENT NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>Mister Jhonson</span>
+PATIENT NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
 maxHeight:'80px',height:"100%",marginTop:"10%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-FIRST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>Mister</span>
+FIRST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -155,7 +155,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-LAST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>Jhonson</span>
+LAST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -163,7 +163,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-DATE OF BIRTH:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>15/7/1985</span>
+DATE OF BIRTH:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -171,7 +171,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT ID:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>PJ-19850715</span>
+PATIENT ID:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -179,7 +179,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT AGE:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>46</span>
+PATIENT AGE:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -187,7 +187,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT HEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>180 cm</span>
+PATIENT HEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -195,7 +195,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT WEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>60 kg</span>
+PATIENT WEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -204,7 +204,7 @@ justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
 
-ADDRESS:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>123 Main St,Anytown,U</span>
+ADDRESS:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
 maxHeight:'80px',height:"100%",
@@ -212,7 +212,7 @@ justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 
 }}>
-PHONE NUMBER:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>1234567890</span>
+PHONE NUMBER:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -220,7 +220,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PRIMARY PHYSICIAN:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>Dr. Smith</span>
+PRIMARY PHYSICIAN:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
 
 </div>
 </div>
