@@ -94,6 +94,8 @@
         color:#000;
         align-items: center;
         justify-content: center;
+        overflow-y: scroll;
+        max-height: 430px;
       }
 
       .close {
