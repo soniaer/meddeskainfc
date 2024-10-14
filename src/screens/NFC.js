@@ -307,7 +307,9 @@ maxHeight:'40px',height:"100%",marginLeft:"0%",marginTop:"8%",
 justifyContent:"center",textAlign:"center",overflow:"hidden",
 alignItems:"center",display:"flex",color:"#fff",fontSize:"18px"
 }}>Id card number raw data reading</div>
+
 </div>
+
 </div>
 <div>
 
@@ -433,16 +435,24 @@ flexDirection:"column"}}>
 <input value={Additional_Data} onChange={(e)=>setAdditional_Data(e.target.value)} style={{width:"60%",border:"2px solid #156082",marginBottom:"2%"}}>
 </input>
 </div>
-</div>
-
-</div>
-<button style={{border:"2px solid #156082",width:"40%",backgroundColor:"#156082",height:"30px",
+<div  style={{width:"100%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
+}}>
+<button onClick={()=>{adddata();document.getElementById("myModal").style.display="none"}} 
+style={{border:"2px solid #156082",width:"40%",backgroundColor:"#156082",height:"30px",
 cursor:"pointer"}}>
 
 
-<span style={{color:"white"}} onClick={()=>{adddata();document.getElementById("myModal").style.display="none"}}>
+<span style={{color:"white"}} >
 Add</span>
 </button>
+<button onClick={()=>{navigate("/view")}} style={{border:"2px solid #156082",width:"40%",backgroundColor:"#156082",height:"30px",
+cursor:"pointer",color:"white"
+}}>View</button>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 </div>
