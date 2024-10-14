@@ -62,7 +62,7 @@ useEffect(()=>{
 
 const deleteid = async(id) =>{
 console.log(id)
-fetch(`http://192.168.1.15:3004/api/deletepatient`,
+fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/deletepatient`,
 {
   method: "POST",
   headers: {
