@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import NFC from './screens/NFC';
-
+import Patients from './screens/View';
 function App() {
   return (
     <div >
@@ -11,7 +11,7 @@ function App() {
       <Routes>
   
       <Route path="/" element={<NFC />} />
-     
+         <Route path="/view" element={<Patients />} />
       </Routes>
       </BrowserRouter>
       {/* <header className="App-header">
