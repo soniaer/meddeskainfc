@@ -117,11 +117,11 @@ color:"#fff",fontSize:"28px",paddingTop:"2%"
 <div style={{display:"flex",width:"100%",justifyContent:"space-between", }}>
 
 
-<div style={{width:"60%",backgroundColor:"#fff",justifyContent:"space-between",
-display:"flex",padding:"1%",maxHeight:"70px",}}>
+<div onClick={()=>{navigate("/")}} style={{width:"60%",backgroundColor:"#fff",justifyContent:"space-between",
+display:"flex",padding:"1%",maxHeight:"70px",cursor:"pointer"}}>
 
 
-<img id="logodiv" alt="" src={require('../img/med.png')} style={{width:"95%",height:"26px"}} />
+<img id="logodiv"  alt="" src={require('../img/med.png')} style={{width:"95%",height:"26px"}} />
 </div>
 <div style={{ width: "55%",border:"3px solid #9ea3ac", 
 maxHeight:'40px',height:"100%",
