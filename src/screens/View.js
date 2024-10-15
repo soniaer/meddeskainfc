@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 function Patients() {
 const [data,setdata] = useState([])
@@ -16,6 +17,8 @@ const [Phone_Number,setPhone_Number] = useState("")
 const [Primary_Physician,setPrimary_Physician] = useState("")
 const [Date_Of_Visit,setDate_Of_Visit] = useState("")
 const [Additional_Data,setAdditional_Data] = useState("")
+
+const navigate = useNavigate();
 
 
 const getdata =async() =>{
