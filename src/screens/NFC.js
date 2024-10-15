@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ const [Last_Name,setLast_Name] = useState("")
 const [Date_Of_Birth,setDate_Of_Birth] = useState("")
 const [Patient_Id,setPatient_Id] = useState("")
 const [Age,setAge] = useState("")
+const [Image,setImage] = useState("")
 const [Height,setHeight] = useState("")
 const [Weight,setWeight] = useState("")
 const [Address,setAddress] = useState("")
@@ -46,6 +47,7 @@ Primary_Physician:Primary_Physician,
 Date_Of_Visit:Date_Of_Visit,
 Additional_Data:Additional_Data  ,
 DateTime: new Date() ,
+Image:Image,
 }),
   }
 )
@@ -62,6 +64,122 @@ DateTime: new Date() ,
     console.log(res);
   });
 }
+
+const [scannedData,setScannedData] = useState({
+  "id":"NA",
+    "IdCard_Number": "NA",
+    "Patient_Name": "NA",
+    "First_Name": "NA",
+    "Last_Name": "NA",
+    "Date_Of_Birth": "NA",
+    "Patient_Id": "NA",
+    "Age": "NA",
+    "Height": "NA",
+    "Weight": "NA",
+    "Address": "NA",
+    "Phone_Number": "NA",
+    "Primary_Physician": "NA",
+    "Date_Of_Visit": "NA",
+    "Additional_Data": "NA",
+    "DateTime": "NA",
+    "Image": "NA"
+})
+
+useEffect(() => {
+  let buffer = '';
+  let timer = null;
+
+  const handleKeyPress = (event) => {
+    // Ignore any special key presses (like Enter, Shift, etc.)
+    if (event.key.length === 1) {
+      buffer += event.key;
+
+      // Clear buffer if there is a delay in keypress (more than 100ms means manual entry)
+      if (timer) clearTimeout(timer);
+
+      // Set a timeout to check when input has stopped
+      timer = setTimeout(() => {
+        console.log(buffer,"**********SCANNED BARCODE**********")
+        fetch(`http://192.168.1.17:3004/api/getscanneddata`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "User-Agent": "*",
+            "Content-Type": "application/json",
+          },
+      body: JSON.stringify({
+        Patient_Id:buffer,
+      }),
+        }
+      )
+        .then((response) => {
+       if (!response.ok) {
+            throw new Error(
+              `HTTP error! Status: ${response?.status} ${response?.statusText}`
+            );
+          }
+      
+          return response.json();
+        })
+        .then((res) => {
+          console.log(res);
+          if(res?.message === undefined || res?.message === "undefined" || res?.message === null || res?.message === "null" ){
+            setScannedData(res)
+           
+          }else{
+setScannedData({
+  "id": "NA",
+  "Title": "NA",
+  "Description": "NA",
+  "Weight": "NA",
+  "Manufacture": "NA",
+  "Barcode_Number": "NA",
+  "Data_Sheet": "NA",
+  "Product_Image": "NA",
+  "DateTime": "NA"
+})
+          }
+        });
+       
+        buffer = '';  // Clear the buffer after capturing the full barcode
+      }, 100);
+    }
+  };
+
+  // Add event listener for keypress
+  window.addEventListener('keypress', handleKeyPress);
+
+  // Cleanup event listener on component unmount
+  return () => {
+    window.removeEventListener('keypress', handleKeyPress);
+  };
+}, []);
+
+function sendMessage() {
+  const fileInput = document.getElementById('file-input');
+  
+  const fileNameDisplay = document.getElementById('fileName');
+  const file = fileInput.files[0];
+  fileNameDisplay.innerHTML=file?.name
+console.log(file?.name,"Product_iamge")
+  if (file) {
+     console.log(file,"file")
+     const reader = new FileReader();
+
+                // Once the file is loaded, convert to Base64 and display
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                  console.log(base64String)
+                  setImage(base64String)
+                };
+
+                // Read the file as a Data URL (Base64)
+                reader.readAsDataURL(file);
+  }
+  fileInput.value = '';
+}
+
 
 return (
 <div id="main"
@@ -140,14 +258,14 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",
 backgroundColor:"#f3f4f6",paddingLeft:"3%"}}>
-PATIENT NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PATIENT NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Patient_Name}</span>
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
 maxHeight:'80px',height:"100%",marginTop:"10%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-FIRST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+FIRST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.First_Name}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -155,7 +273,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-LAST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+LAST NAME:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Last_Name}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -163,7 +281,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-DATE OF BIRTH:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+DATE OF BIRTH:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Date_Of_Birth}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -171,7 +289,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT ID:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PATIENT ID:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Patient_Id}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -179,7 +297,16 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT AGE:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PATIENT AGE:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Age}</span>
+
+</div>
+
+<div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
+maxHeight:'80px',height:"100%",
+justifyContent:"flex-start",textAlign:"center",
+alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
+}}>
+PATIENT HEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Height}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -187,15 +314,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PATIENT HEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
-
-</div>
-<div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
-maxHeight:'80px',height:"100%",
-justifyContent:"flex-start",textAlign:"center",
-alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
-}}>
-PATIENT WEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PATIENT WEIGHT:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Weight}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -204,7 +323,7 @@ justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
 
-ADDRESS:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+ADDRESS:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Address}</span>
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
 maxHeight:'80px',height:"100%",
@@ -212,7 +331,7 @@ justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 
 }}>
-PHONE NUMBER:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PHONE NUMBER:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Phone_Number}</span>
 
 </div>
 <div style={{ width: "95%",backgroundColor:"#f3f4f6",border:"3px solid #9ea3ac", 
@@ -220,7 +339,7 @@ maxHeight:'80px',height:"100%",
 justifyContent:"flex-start",textAlign:"center",
 alignItems:"center",color:"#000",fontSize:"13px",display:"flex",fontWeight:"600",paddingLeft:"3%",
 }}>
-PRIMARY PHYSICIAN:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>NA</span>
+PRIMARY PHYSICIAN:<span style={{color:"#000",fontSize:"13px",fontWeight:"500",marginLeft:"5%",overflow:"hidden",}}>{scannedData?.Primary_Physician}</span>
 
 </div>
 </div>
@@ -246,44 +365,44 @@ height:"100%",marginTop:"3%"}}  class="table table-responsive" >
 <tbody  style={{fontWeight:"500",fontSize:"14px",textAlign:"left",
 backgroundColor:"#d1d5db"}}>
 <tr>
-<td style={{border:"none"}}>NA</td>
-<td style={{border:"none"}}></td>
+<td style={{border:"none"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{border:"none"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{border:"none"}}>NA</td>
-<td style={{border:"none"}}></td>
+<td style={{border:"none"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{border:"none"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>NA</td>
-<td style={{borderRight:"1px solid #000",borderTop:"none"}}></td>
+<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{borderRight:"1px solid #000",borderTop:"none"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>NA</td>
-<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}></td>
+<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>NA</td>
-<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}></td>
+<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>NA</td>
-<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}></td>
+<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>NA</td>
-<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}></td>
+<td style={{backgroundColor:"#fff",borderBottom:"2px solid #d1d5db"}}>{scannedData?.Date_Of_Visit}</td>
+<td style={{borderTop:"1px solid #000",borderRight:"1px solid #000"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 <tr>
-<td style={{backgroundColor:"#fff",border:"none"}}>NA</td>
+<td style={{backgroundColor:"#fff",border:"none"}}>{scannedData?.Date_Of_Visit}</td>
 <td style={{borderTop:"1px solid #000",borderRight:"1px solid #000",
-borderBottom:"1px solid #000"}}></td>
+borderBottom:"1px solid #000"}}>{scannedData?.Additional_Data}</td>
 
 </tr>
 </tbody>
@@ -302,14 +421,15 @@ alignItems:"center",display:"flex",color:"#fff",fontSize:"18px", flexDirection:"
 <div style={{border:"2px solid #fff", width: "74%",
 maxHeight:'300px',height:"100%",marginLeft:"0%",marginTop:"0%",
 justifyContent:"center",textAlign:"center",
-alignItems:"center",display:"flex",color:"#fff",fontSize:"18px",
+alignItems:"center",display:"flex",color:"#fff",fontSize:"18px",flexDirection:"column"
 
-}}>Picture</div>
-<div style={{border:"2px solid #fff", width: "74%",
+}}>Picture
+<img alt="" src={scannedData?.Image} style={{width:"50%",marginTop:"5%"}} />   </div>
+<div  style={{border:"2px solid #fff", width: "74%",
 maxHeight:'40px',height:"100%",marginLeft:"0%",marginTop:"8%",
 justifyContent:"center",textAlign:"center",overflow:"hidden",
 alignItems:"center",display:"flex",color:"#fff",fontSize:"18px"
-}}>Id card number raw data reading</div>
+}}>{scannedData?.Patient_Id}</div>
 
 </div>
 
@@ -388,6 +508,14 @@ flexDirection:"column"}}>
 
 <input value={Age} onChange={(e)=>setAge(e.target.value)} style={{width:"60%",border:"2px solid #156082",marginBottom:"2%"}}>
 </input>
+</div>
+<div style={{width:"100%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
+}}>
+<label>PATIENT IMAGE:</label>
+
+<input type="file" id="file-input" onChange={(e)=>{sendMessage()}} style={{width:"20%",border:"2px solid #156082",marginBottom:"2%"}}>
+</input>
+<div id="fileName" style={{marginTop:"0.5%",overflow:"hidden",width:"25%",maxHeight:"20px"}}>No file chosen</div>
 </div>
 <div style={{width:"100%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
 }}>
