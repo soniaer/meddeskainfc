@@ -100,7 +100,7 @@ useEffect(() => {
       // Set a timeout to check when input has stopped
       timer = setTimeout(() => {
         console.log(buffer,"**********SCANNED BARCODE**********")
-        fetch(`http://192.168.1.17:3004/api/getscanneddata`,
+        fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/getscanneddata`,
         {
           method: "POST",
           headers: {
@@ -129,15 +129,23 @@ useEffect(() => {
            
           }else{
 setScannedData({
-  "id": "NA",
-  "Title": "NA",
-  "Description": "NA",
+  "id":"NA",
+  "IdCard_Number": "NA",
+  "Patient_Name": "NA",
+  "First_Name": "NA",
+  "Last_Name": "NA",
+  "Date_Of_Birth": "NA",
+  "Patient_Id": "NA",
+  "Age": "NA",
+  "Height": "NA",
   "Weight": "NA",
-  "Manufacture": "NA",
-  "Barcode_Number": "NA",
-  "Data_Sheet": "NA",
-  "Product_Image": "NA",
-  "DateTime": "NA"
+  "Address": "NA",
+  "Phone_Number": "NA",
+  "Primary_Physician": "NA",
+  "Date_Of_Visit": "NA",
+  "Additional_Data": "NA",
+  "DateTime": "NA",
+  "Image": "NA"
 })
           }
         });
