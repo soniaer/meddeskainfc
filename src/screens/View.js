@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom';
 function Patients() {
 const [data,setdata] = useState([])
 const [Patient_Name,setPatient_Name] = useState("")
+const [SelectedId,setSelectedId] = useState("")
 const [First_Name,setFirst_Name] = useState("")
+const [Image,setImage] = useState("")
 const [Last_Name,setLast_Name] = useState("")
 const [Date_Of_Birth,setDate_Of_Birth] = useState("")
 const [Patient_Id,setPatient_Id] = useState("")
@@ -17,6 +19,7 @@ const [Phone_Number,setPhone_Number] = useState("")
 const [Primary_Physician,setPrimary_Physician] = useState("")
 const [Date_Of_Visit,setDate_Of_Visit] = useState("")
 const [Additional_Data,setAdditional_Data] = useState("")
+
 
 const navigate = useNavigate();
 
@@ -92,6 +95,73 @@ if (!response.ok) {
 });
 }
 
+function sendMessage() {
+  const fileInput = document.getElementById('file-input');
+  
+  const fileNameDisplay = document.getElementById('fileName');
+  const file = fileInput.files[0];
+  fileNameDisplay.innerHTML=file?.name
+console.log(file?.name,"Product_iamge")
+  if (file) {
+     console.log(file,"file")
+     const reader = new FileReader();
+
+                // Once the file is loaded, convert to Base64 and display
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                  console.log(base64String)
+                  setImage(base64String)
+                };
+
+                // Read the file as a Data URL (Base64)
+                reader.readAsDataURL(file);
+  }
+  fileInput.value = '';
+}
+
+const updateitem = async() =>{
+  console.log(SelectedId)
+  fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/updatepatients`,
+  {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "*",
+      "Content-Type": "application/json",
+    },
+  body: JSON.stringify({
+  id:SelectedId,
+  IdCard_Number:Patient_Id,
+Patient_Name: Patient_Name ,
+First_Name:First_Name,
+Last_Name:Last_Name,
+Date_Of_Birth:Date_Of_Birth,
+Patient_Id:Patient_Id  ,
+Age:Age,
+Height:Height,
+Weight:Weight ,
+Address:Address,
+Phone_Number: Phone_Number,
+Primary_Physician:Primary_Physician,
+Date_Of_Visit:Date_Of_Visit,
+Additional_Data:Additional_Data  ,
+DateTime: new Date() ,
+Image:Image,
+  }),
+  }
+  )
+  .then((response) => {
+  if (!response.ok) {
+      throw new Error(
+        `HTTP error! Status: ${response?.status} ${response?.statusText}`
+      );
+    }
+    return response.json();
+  })
+  .then((res) => {
+    console.log(res);
+  });
+  }
 
 return (
 <div id="main"
@@ -182,12 +252,8 @@ height:"100%",marginTop:"1%"}}  class="table table-responsive" >
 <th style={{border:"none"}}>ADDRESS</th>
 <th style={{border:"none"}}>PHONE NUMBER</th>
 <th style={{border:"none"}}>PRIMARY PHYSICIAN</th>
+<th style={{border:"none"}}>Edit</th>
 <th style={{border:"none"}}>Delete</th>
-
-
-
-
-
 </tr>
 </thead>
 <tbody  style={{fontWeight:"500",fontSize:"14px",textAlign:"left",
@@ -205,12 +271,15 @@ backgroundColor:"#d1d5db"}}>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Address}</td>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Phone_Number}</td>
 <td style={{borderRight:"2px solid #d1d5db",borderTop:"none"}}>{item?.Primary_Physician}</td>
+<td onClick={()=>{setSelectedId(item.id);setPatient_Id(item?.Patient_Id);setPatient_Name(item?.Patient_Name);setFirst_Name(item?.First_Name);
+setLast_Name(item?.Last_Name);setDate_Of_Birth(item?.Date_Of_Birth);setAge(item?.Age);setHeight(item?.Height);setWeight(item?.Weight);setAddress(item?.Address);
+setPhone_Number(item?.Phone_Number);setPrimary_Physician(item?.Primary_Physician);setAdditional_Data(item?.Additional_Data);setDate_Of_Visit(item?.Date_Of_Visit);
+document.getElementById("myModal").style.display="block"}} style={{borderRight:"2px solid #d1d5db",borderTop:"none",cursor:"pointer"}}><img alt="" src={require("../img/pencil.png")} 
+style={{width:"20px",height:"20px"}} /></td>
 <td onClick={()=>deleteid(item?.id)} style={{borderRight:"2px solid #d1d5db",borderTop:"none",cursor:"pointer"}}><img alt="" src={require("../img/delete.png")} 
-style={{width:"55%",height:"20px"}} /></td>
+style={{width:"20px",height:"20px"}} /></td>
 </tr>
     )}
-
-
 </tbody>
 </table>
 </div>
@@ -218,17 +287,12 @@ style={{width:"55%",height:"20px"}} /></td>
 </div>
 
 </div>
-
-
-
 </div>
 <div>
 
 <div style={{marginTop:"19.55vh",width:"96%",paddingLeft:"2%",color:"white",paddingRight:"0%"}}>
 
 <div style={{fontSize:"16px"}}>
-
-
 Disclaimers and warning :
 </div>
 <div style={{fontSize:"16px",fontWeight:"600"}}>
@@ -299,6 +363,14 @@ flexDirection:"column"}}>
 </div>
 <div style={{width:"100%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
 }}>
+  <label>PATIENT IMAGE:</label>
+
+<input type="file" id="file-input" onChange={(e)=>{sendMessage()}} style={{width:"20%",border:"2px solid #156082",marginBottom:"2%"}}>
+</input>
+<div id="fileName" style={{marginTop:"0.5%",overflow:"hidden",width:"25%",maxHeight:"20px"}}>No file chosen</div>
+</div>
+<div style={{width:"100%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
+}}>
 <label>PATIENT HEIGHT:</label>
 
 <input value={Height} onChange={(e)=>setHeight(e.target.value)} style={{width:"60%",border:"2px solid #156082",marginBottom:"2%"}}>
@@ -349,12 +421,10 @@ flexDirection:"column"}}>
 </div>
 
 </div>
-<button onClick={()=>{document.getElementById("myModal").style.display="none"}} style={{border:"2px solid #156082",width:"40%",backgroundColor:"#156082",height:"30px",
+<button onClick={()=>{updateitem(); document.getElementById("myModal").style.display="none"}} style={{border:"2px solid #156082",width:"40%",backgroundColor:"#156082",height:"30px",
 cursor:"pointer"}}>
-
-
 <span style={{color:"white"}} >
-Add</span>
+Update</span>
 </button>
 </div>
 </div>
@@ -362,8 +432,6 @@ Add</span>
 </div>
 </div>
 </div>
-
-
 );
 }
 
