@@ -19,7 +19,8 @@ const [Primary_Physician,setPrimary_Physician] = useState("")
 const [Date_Of_Visit,setDate_Of_Visit] = useState("")
 const [Additional_Data,setAdditional_Data] = useState("")
 
-  
+const [message, setMessage] = useState('');
+
 const navigate = useNavigate();
 
 const adddata =async() =>{
@@ -100,6 +101,7 @@ useEffect(() => {
       // Set a timeout to check when input has stopped
       timer = setTimeout(() => {
         console.log(buffer,"**********SCANNED BARCODE**********")
+        setMessage(buffer)
         fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/getscanneddata`,
         {
           method: "POST",
@@ -238,6 +240,7 @@ marginLeft:"25%",backgroundColor:"#fff",cursor:"pointer"}}>
 ADD</div>
 </div><span style={{fontSize:"70%"}}>It Just works Better</span>
 </div>
+<div style={{color:"white",marginLeft:45,marginTop:10}}>Scanned Data: {message}</div>
 <div style={{alignItems:"center", width: "94%",
 maxHeight:'419px',height:"100%",marginLeft:"3%",marginTop:"1.5%",
 justifyContent:"space-between",display:"flex"
