@@ -21,57 +21,52 @@ const [Additional_Data,setAdditional_Data] = useState("")
 
 const [message, setMessage] = useState('');
 
-const scan = async() => {
-    if ("NDEFReader" in window) {
-        try {
-          console.log("in ndef window")
-            const ndef = new window.NDEFReader();
-            await ndef.scan();
-
-            console.log("Scan started successfully.");
-            ndef.onreadingerror = () => {
-                alert("Cannot read data from the NFC tag. Try another one?");
-            };
-
-            ndef.onreading = (event) => {
-                console.log("NDEF message read.");
-                onReading(event); //Find function below
-            };
-        } catch (error) {
-            console.log(`Error! Scan failed to start: ${error}.`);
-        }
-    }else{
-      console.log("not in  ndef window")
-
-    }
-};
-
-
-const onReading = ({message, serialNumber}) => {
-  console.log(serialNumber);
+const onReading = useCallback(({ message, serialNumber }) => {
+  console.log("Serial Number:", serialNumber);
   for (const record of message.records) {
-      switch (record.recordType) {
-          case "text":
-              const textDecoder = new TextDecoder(record.encoding);
-              console.log("Message", textDecoder.decode(record.data));
-              setMessage(textDecoder.decode(record.data))
-              break;
-          case "url":
-                        setMessage(textDecoder.decode(record.data))
-
-              // TODO: Read URL record with record data.
-              break;
-          default:
-                        setMessage(textDecoder.decode(record.data))
-
-              // TODO: Handle other records with record data.
-      }
+    switch (record.recordType) {
+      case "text":
+        const textDecoder = new TextDecoder(record.encoding);
+        const decodedMessage = textDecoder.decode(record.data);
+        console.log("Message:", decodedMessage);
+        setMessage(decodedMessage);
+        break;
+      case "url":
+        console.log("URL detected:", record.data);
+        break;
+      default:
+        console.log("Unknown record type.");
+    }
   }
-};
+}, []);
 
-useEffect(()=>{
-scan()
-},[scan])
+const scan = useCallback(async () => {
+  if ("NDEFReader" in window) {
+    try {
+      console.log("NFC scanning started...");
+      const ndef = new window.NDEFReader();
+      await ndef.scan();
+
+      console.log("Scan started successfully.");
+      ndef.onreadingerror = () => {
+        alert("Cannot read data from the NFC tag. Try another one?");
+      };
+
+      ndef.onreading = (event) => {
+        console.log("NDEF message read.");
+        onReading(event);
+      };
+    } catch (error) {
+      console.log(`Error! Scan failed to start: ${error}.`);
+    }
+  } else {
+    console.log("NFC not supported on this device.");
+  }
+}, [onReading]); // Add onReading as a dependency since it's used inside
+
+useEffect(() => {
+  scan(); // Start scanning when the component mounts
+}, [scan]); // Now scan is stable due to useCallback
 
 const navigate = useNavigate();
 
