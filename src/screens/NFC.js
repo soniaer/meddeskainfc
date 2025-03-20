@@ -64,8 +64,61 @@ const scan = useCallback(async () => {
   }
 }, [onReading]); // Add onReading as a dependency since it's used inside
 
+async function connectToNFCReader() {
+  if ("hid" in navigator) {
+      try {
+        console.log("WebHID API  supported in this browser.");
+
+          const devices = await navigator.hid.requestDevice({ filters: [] });
+          if (devices.length > 0) {
+              const device = devices[0];
+              await device.open();
+              console.log("Connected to NFC Reader:", device);
+
+              device.oninputreport = (event) => {
+                  const data = new Uint8Array(event.data.buffer);
+                  console.log("NFC Data:", data);
+                  setMessage(data)
+
+              };
+          }
+      } catch (error) {
+          console.error("Error connecting to NFC Reader:", error);
+      }
+  } else {
+      console.log("WebHID API not supported in this browser.");
+  }
+}
+
+
+async function connectSerialNFC() {
+  if ("serial" in navigator) {
+      try {
+        console.log("Web Serial API supported in this browser.");
+
+          const port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 9600 });
+
+          const reader = port.readable.getReader();
+          while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              console.log("NFC Data:", new TextDecoder().decode(value));
+              setMessage(new TextDecoder().decode(value))
+          }
+      } catch (error) {
+          console.error("Serial connection error:", error);
+      }
+  } else {
+      console.log("Web Serial API not supported in this browser.");
+  }
+}
+
+
 useEffect(() => {
   scan(); // Start scanning when the component mounts
+  // connectToNFCReader();
+  // connectSerialNFC();
 }, [scan]); // Now scan is stable due to useCallback
 
 const navigate = useNavigate();
@@ -280,6 +333,10 @@ ADD</div>
 </div><span style={{fontSize:"70%"}}>It Just works Better</span>
 </div>
 <div style={{color:"white",marginLeft:45,marginTop:10}}>Scanned Data: {message}</div>
+<div onClick={connectToNFCReader} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC(HID)</div>
+<div onClick={connectSerialNFC} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC (Serial)</div>
+
+
 <div style={{alignItems:"center", width: "94%",
 maxHeight:'419px',height:"100%",marginLeft:"3%",marginTop:"1.5%",
 justifyContent:"space-between",display:"flex"
@@ -391,8 +448,8 @@ flexDirection:"column",alignItems:"center"
 }}>
 <p style={{textAlign:"right",width:"99%",color:"#9ea3ac",fontFamily:"Poppins",paddingRight:"2%"}}>Data</p>
 <div style={{ width: "98%",border:"2px solid #d1d5db",maxHeight:"380px",
-height:"100%",marginTop:"3%"}}  class="table table-responsive" >
-<table class="table table-responsive">
+height:"100%",marginTop:"3%"}}  className="table table-responsive" >
+<table className="table table-responsive">
 <thead style={{fontWeight:"500",fontSize:"12px",textAlign:"left"}}>
 <tr style={{backgroundColor:"#e5e7eb"}}>
 <th style={{borderRight:"1px solid #d1d5db"}}>DATE of visit</th>
@@ -472,9 +529,9 @@ be construed as real data or representative of any actual real medical data .
 <div style={{fontSize:"16px",marginTop:"1.25%"}}>
 This webpage is been powered by MedDesk-AI all rights received ©
 </div>
-<div id="myModal" class="modal">
-<div class="modal-content">
-<span class="close" onClick={()=>{document.getElementById("myModal").style.display="none"}}>&times;</span>
+<div id="myModal" className="modal">
+<div className="modal-content">
+<span className="close" onClick={()=>{document.getElementById("myModal").style.display="none"}}>&times;</span>
 <h4 style={{color:"#156082"}}>Add Data</h4>
 <div style={{display:"flex",justifyContent:"center",alignItems:"center",width:"100%"}}>
 <div style={{width:"80%",paddingTop:"1%",paddingBottom:"1%",color:"#156082",display:"flex",justifyContent:"space-between",
