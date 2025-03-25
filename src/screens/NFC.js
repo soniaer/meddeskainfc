@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
-
+import { io } from "socket.io-client";
 function NFC() {
 //const [IdCard_Number,setIdCard_Number] = useState("")
 const [Patient_Name,setPatient_Name] = useState("")
@@ -22,26 +22,46 @@ const [Additional_Data,setAdditional_Data] = useState("")
 const [message, setMessage] = useState('');
 const [nfcData, setNfcData] = useState({ uid: "", data: "" });
 
+  // useEffect(() => {
+  //   const ws = new WebSocket("ws://10.100.102.1:8000/ws");
+
+  //   ws.onopen = () => {
+  //     console.log("Connected to WebSocket server");
+  //   };
+
+  //   ws.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     setNfcData(data); // Update UI with new NFC data
+  //   };
+
+  //   ws.onerror = (error) => {
+  //     console.error("WebSocket Error:", error);
+  //   };
+
+  //   return () => {
+  //     ws.close();
+  //   };
+  // }, []);
+
+  const socket = io("wss://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net"); // Use wss:// for secure WebSocket
+
   useEffect(() => {
-    const ws = new WebSocket("ws://10.100.102.1:8000/ws");
-
-    ws.onopen = () => {
-      console.log("Connected to WebSocket server");
-    };
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setNfcData(data); // Update UI with new NFC data
-    };
-
-    ws.onerror = (error) => {
-      console.error("WebSocket Error:", error);
-    };
+    socket.on("nfc_data", (data) => {
+      console.log("Received NFC Data:", data);
+      setNfcData(data);
+    });
 
     return () => {
-      ws.close();
+      socket.off("nfc_data");
     };
   }, []);
+
+  // app.post("/webhook", (req, res) => {
+  //   console.log("NFC Data Received:", req.body.uid);
+  //   io.emit("nfc_data", req.body.uid); // Emit event for real-time updates
+  //   res.sendStatus(200);
+  // });
+  
 
 const onReading = useCallback(({ message, serialNumber }) => {
   console.log("Serial Number:", serialNumber);
