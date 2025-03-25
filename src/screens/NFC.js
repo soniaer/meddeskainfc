@@ -20,6 +20,28 @@ const [Date_Of_Visit,setDate_Of_Visit] = useState("")
 const [Additional_Data,setAdditional_Data] = useState("")
 
 const [message, setMessage] = useState('');
+const [nfcData, setNfcData] = useState({ uid: "", data: "" });
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://10.100.102.1:8000/ws");
+
+    ws.onopen = () => {
+      console.log("Connected to WebSocket server");
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setNfcData(data); // Update UI with new NFC data
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
 const onReading = useCallback(({ message, serialNumber }) => {
   console.log("Serial Number:", serialNumber);
@@ -332,7 +354,7 @@ marginLeft:"25%",backgroundColor:"#fff",cursor:"pointer"}}>
 ADD</div>
 </div><span style={{fontSize:"70%"}}>It Just works Better</span>
 </div>
-<div style={{color:"white",marginLeft:45,marginTop:10}}>Scanned Data: {message}</div>
+<div style={{color:"white",marginLeft:45,marginTop:10}}>Scanned Data: {message}{nfcData?.uid}{nfcData?.data}</div>
 <div onClick={connectToNFCReader} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC(HID)</div>
 <div onClick={connectSerialNFC} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC (Serial)</div>
 
