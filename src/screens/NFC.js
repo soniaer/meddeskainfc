@@ -22,18 +22,38 @@ const [Additional_Data,setAdditional_Data] = useState("")
 const [message, setMessage] = useState('');
 const [nfcData, setNfcData] = useState({ uid: "", data: "" });
 
-  const socket = io("wss://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net"); // Use wss:// for secure WebSocket
+  const socket = io("wss://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net", {
+    reconnection: true,      // Enable reconnection
+    reconnectionAttempts: 10, // Number of retries before failing
+    reconnectionDelay: 1000, // Delay between reconnect attempts
+  }); // Use wss:// for secure WebSocket
 
   useEffect(() => {
-    socket.on("nfc_data", (data) => {
+    const handleNfcData = (data) => {
       console.log("Received NFC Data:", data);
       setNfcData(data);
-    });
+    };
+
+    const handleReconnect = () => {
+      console.log("Reconnected to server");
+    };
+
+    const handleDisconnect = () => {
+      console.log("Disconnected! Trying to reconnect...");
+    };
+
+    // Listen for NFC data
+    socket.on("nfc_data", handleNfcData);
+
+    // Handle reconnect and disconnect events
+    socket.on("connect", handleReconnect);
+    socket.on("disconnect", handleDisconnect);
 
     return () => {
-      socket.off("nfc_data");
+      socket.off("nfc_data", handleNfcData);
+      socket.off("connect", handleReconnect);
+      socket.off("disconnect", handleDisconnect);
     };
-    // eslint-disable-next-line
   }, []);
   
 
@@ -80,61 +100,8 @@ const scan = useCallback(async () => {
   }
 }, [onReading]); // Add onReading as a dependency since it's used inside
 
-async function connectToNFCReader() {
-  if ("hid" in navigator) {
-      try {
-        console.log("WebHID API  supported in this browser.");
-
-          const devices = await navigator.hid.requestDevice({ filters: [] });
-          if (devices.length > 0) {
-              const device = devices[0];
-              await device.open();
-              console.log("Connected to NFC Reader:", device);
-
-              device.oninputreport = (event) => {
-                  const data = new Uint8Array(event.data.buffer);
-                  console.log("NFC Data:", data);
-                  setMessage(data)
-
-              };
-          }
-      } catch (error) {
-          console.error("Error connecting to NFC Reader:", error);
-      }
-  } else {
-      console.log("WebHID API not supported in this browser.");
-  }
-}
-
-
-async function connectSerialNFC() {
-  if ("serial" in navigator) {
-      try {
-        console.log("Web Serial API supported in this browser.");
-
-          const port = await navigator.serial.requestPort();
-          await port.open({ baudRate: 9600 });
-
-          const reader = port.readable.getReader();
-          while (true) {
-              const { value, done } = await reader.read();
-              if (done) break;
-              console.log("NFC Data:", new TextDecoder().decode(value));
-              setMessage(new TextDecoder().decode(value))
-          }
-      } catch (error) {
-          console.error("Serial connection error:", error);
-      }
-  } else {
-      console.log("Web Serial API not supported in this browser.");
-  }
-}
-
-
 useEffect(() => {
   scan(); // Start scanning when the component mounts
-  // connectToNFCReader();
-  // connectSerialNFC();
 }, [scan]); // Now scan is stable due to useCallback
 
 const navigate = useNavigate();
@@ -348,10 +315,7 @@ marginLeft:"25%",backgroundColor:"#fff",cursor:"pointer"}}>
 ADD</div>
 </div><span style={{fontSize:"70%"}}>It Just works Better</span>
 </div>
-<div style={{color:"white",marginLeft:45,marginTop:10}}>Scanned Data: {message}UID: {nfcData?.uid} ,Data: {nfcData?.data}</div>
-<div onClick={connectToNFCReader} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC(HID)</div>
-<div onClick={connectSerialNFC} style={{color:"white",marginLeft:45,marginTop:10,cursor:"pointer"}}>Click to Connect with NFC (Serial)</div>
-
+<div style={{color:"white",marginLeft:45,marginTop:20}}>Scanned Data: {message}UID: {nfcData?.uid} ,Data: {nfcData?.data}</div>
 
 <div style={{alignItems:"center", width: "94%",
 maxHeight:'419px',height:"100%",marginLeft:"3%",marginTop:"1.5%",
