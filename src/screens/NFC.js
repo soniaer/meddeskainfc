@@ -205,7 +205,7 @@ useEffect(() => {
             "Content-Type": "application/json",
           },
       body: JSON.stringify({
-        Patient_Id:buffer,
+        nfcData:buffer,
       }),
         }
       )
