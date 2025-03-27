@@ -1,7 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
 import { io } from "socket.io-client";
+var previousdata ;
+
 function NFC() {
 //const [IdCard_Number,setIdCard_Number] = useState("")
 const [Patient_Name,setPatient_Name] = useState("")
@@ -29,10 +31,65 @@ const [nfcData, setNfcData] = useState({ uid: "", data: "" });
   }); // Use wss:// for secure WebSocket
 
   useEffect(() => {
-    const handleNfcData = (data) => {
+    const handleNfcData = async(data) => {
       console.log("Received NFC Data:", data);
       setNfcData(data);
+if(previousdata?.uid === data?.uid){
+
+}else{
+  console.log("not same",previousdata,data)
+      fetch(`https://meddesknode-f0djang2hcfub6dc.eastus2-01.azurewebsites.net/api/getscanneddata`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "*",
+          "Content-Type": "application/json",
+        },
+    body: JSON.stringify({
+      nfcData:data.data,
+    }),
+      }
+    )
+      .then((response) => {
+     if (!response.ok) {
+          throw new Error(
+            `HTTP error! Status: ${response?.status} ${response?.statusText}`
+          );
+        }
+    
+        return response.json();
+      })
+      .then((res) => {
+        console.log(res);
+        if(res?.message === undefined || res?.message === "undefined" || res?.message === null || res?.message === "null" ){
+          setScannedData(res)
+          previousdata = data;
+        }else{
+setScannedData({
+"id":"NA",
+"IdCard_Number": "NA",
+"Patient_Name": "NA",
+"First_Name": "NA",
+"Last_Name": "NA",
+"Date_Of_Birth": "NA",
+"Patient_Id": "NA",
+"Age": "NA",
+"Height": "NA",
+"Weight": "NA",
+"Address": "NA",
+"Phone_Number": "NA",
+"Primary_Physician": "NA",
+"Date_Of_Visit": "NA",
+"Additional_Data": "NA",
+"DateTime": "NA",
+"Image": "NA"
+})
+        }
+      });
     };
+ 
+  }
 
     const handleReconnect = () => {
       console.log("Reconnected to server");
@@ -54,55 +111,9 @@ const [nfcData, setNfcData] = useState({ uid: "", data: "" });
       socket.off("connect", handleReconnect);
       socket.off("disconnect", handleDisconnect);
     };
+    // eslint-disable-next-line
   }, []);
   
-
-const onReading = useCallback(({ message, serialNumber }) => {
-  console.log("Serial Number:", serialNumber);
-  for (const record of message.records) {
-    switch (record.recordType) {
-      case "text":
-        const textDecoder = new TextDecoder(record.encoding);
-        const decodedMessage = textDecoder.decode(record.data);
-        console.log("Message:", decodedMessage);
-        setMessage(decodedMessage);
-        break;
-      case "url":
-        console.log("URL detected:", record.data);
-        break;
-      default:
-        console.log("Unknown record type.");
-    }
-  }
-}, []);
-
-const scan = useCallback(async () => {
-  if ("NDEFReader" in window) {
-    try {
-      console.log("NFC scanning started...");
-      const ndef = new window.NDEFReader();
-      await ndef.scan();
-
-      console.log("Scan started successfully.");
-      ndef.onreadingerror = () => {
-        alert("Cannot read data from the NFC tag. Try another one?");
-      };
-
-      ndef.onreading = (event) => {
-        console.log("NDEF message read.");
-        onReading(event);
-      };
-    } catch (error) {
-      console.log(`Error! Scan failed to start: ${error}.`);
-    }
-  } else {
-    console.log("NFC not supported on this device.");
-  }
-}, [onReading]); // Add onReading as a dependency since it's used inside
-
-useEffect(() => {
-  scan(); // Start scanning when the component mounts
-}, [scan]); // Now scan is stable due to useCallback
 
 const navigate = useNavigate();
 
@@ -287,12 +298,12 @@ fontFamily:"Poppins",
 >
 <div style={{height:"100%", width: "100%",overflowX:"hidden" }}>
 <div style={{ width: "94%",
-maxHeight:'100px',height:"100%",marginLeft:"3%",
+maxHeight:'120px',height:"100%",marginLeft:"3%",
 backgroundColor:"transparent",
 display:"flex",flexDirection:"column",justifyContent:"space-between"
 ,textAlign:"flex-start",
 alignItems:"flex-start",
-color:"#fff",fontSize:"28px",paddingTop:"2%"
+color:"#fff",fontSize:"28px",paddingTop:"2%",
 }}>
 <div style={{display:"flex",width:"100%",justifyContent:"space-between", }}>
 <div style={{width:"60%",backgroundColor:"#fff",justifyContent:"space-between",
@@ -313,9 +324,10 @@ alignItems:"center",color:"#000",fontSize:"70%",display:"flex",fontWeight:"500",
 overflow:"hidden",
 marginLeft:"25%",backgroundColor:"#fff",cursor:"pointer"}}>
 ADD</div>
-</div><span style={{fontSize:"70%"}}>It Just works Better</span>
+</div><span style={{fontSize:"70%"}}>It Just works Better ,Scanned Data: {message}UID: {nfcData?.uid} ,Data: {nfcData?.data}</span>
+
 </div>
-<div style={{color:"white",marginLeft:45,marginTop:20}}>Scanned Data: {message}UID: {nfcData?.uid} ,Data: {nfcData?.data}</div>
+<div style={{color:"white",marginLeft:45,marginTop:30,}}></div>
 
 <div style={{alignItems:"center", width: "94%",
 maxHeight:'419px',height:"100%",marginLeft:"3%",marginTop:"1.5%",
